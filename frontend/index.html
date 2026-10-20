@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-powered respiratory disease detection from breath sounds. Analyze lung audio to detect Asthma, COPD, Pneumonia using deep learning.">
+    <title>BreathAnalysis — Respiratory Disease Detector</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="index.css?v=3">
+</head>
+<body>
+
+    <nav id="navbar">
+        <div id="college-topbar">
+            <div class="topbar-container">
+                <div class="college-logo-wrap">
+                    <svg class="college-logo-svg" viewBox="0 0 100 100" width="44" height="44">
+                        <defs>
+                            <path id="topPath" d="M 15,50 A 35,35 0 0,1 85,50" fill="none" />
+                            <path id="bottomPath" d="M 85,50 A 35,35 0 0,1 15,50" fill="none" />
+                        </defs>
+                        
+                        <circle cx="50" cy="50" r="48" fill="#ffffff" />
+                        
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#000000" stroke-width="2" />
+                        <circle cx="50" cy="50" r="38" fill="none" stroke="#000000" stroke-width="1.2" />
+                        <text font-family="'Inter', sans-serif" font-size="4.2" font-weight="bold" fill="#000000" letter-spacing="0.2">
+                            <textPath href="#topPath" startOffset="50%" text-anchor="middle">
+                                RASHTREEYA SIKSHANA SAMITHI TRUST
+                            </textPath>
+                        </text>
+                        <text font-family="'Inter', sans-serif" font-size="4.5" font-weight="bold" fill="#000000" letter-spacing="0.5">
+                            <textPath href="#bottomPath" startOffset="50%" text-anchor="middle">
+                                INSTITUTIONS
+                            </textPath>
+                        </text>
+                        <path d="M 33,36 C 39,37.5 45,37.5 50,36 C 55,37.5 61,37.5 67,36 L 67,52 C 67,65 50,73 50,73 C 50,73 33,65 33,52 Z" 
+                              fill="none" stroke="#000000" stroke-width="1.8" />
+                        <line x1="50" y1="36" x2="50" y2="73" stroke="#000000" stroke-width="1.8" />
+                        <text x="41.5" y="55" font-family="'Inter', sans-serif" font-weight="900" font-size="13" text-anchor="middle" fill="#000000">R</text>
+                        <text x="58.5" y="55" font-family="'Inter', sans-serif" font-weight="900" font-size="13" text-anchor="middle" fill="#000000">V</text>
+                    </svg>
+                </div>
+                <div class="college-info">
+                    <span class="college-title">R.V. College of Engineering<sup>®</sup></span>
+                    <span class="college-location">Autonomous Institution affiliated to VTU, Bengaluru</span>
+                </div>
+            </div>
+        </div>
+        <div class="nav-container">
+            <a href="#hero" class="nav-logo">
+                <span class="logo-icon"><svg width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M6.081 20C2.033 17.092 1 13.676 1 12.5c0-2.033 1.073-3.5 2.5-3.5 1.5 0 2.5 1 3 2l1.5 2.5'/><path d='M17.92 20c4.047-2.908 5.08-6.324 5.08-7.5 0-2.033-1.073-3.5-2.5-3.5-1.5 0-2.5 1-3 2L14 13.5'/><path d='M12 2v7.5M8 5.5l4 4 4-4'/></svg></span>
+                <span class="logo-text">Breath<span class="logo-accent">Analysis</span></span>
+            </a>
+            <div class="nav-links" id="nav-links">
+                <a href="#hero" class="nav-link active">Home</a>
+                <a href="#analyzer" class="nav-link">Analyzer</a>
+                <a href="#diseases" class="nav-link">Diseases</a>
+                <a href="#how-it-works" class="nav-link">How It Works</a>
+            </div>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <section id="hero">
+            <div class="hero-bg">
+
+                <div class="hero-orb hero-orb-1"></div>
+                <div class="hero-orb hero-orb-2"></div>
+                <div class="hero-orb hero-orb-3"></div>
+            </div>
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="badge-dot"></span>
+                    AI-Powered Respiratory Analysis
+                </div>
+                <h1 class="hero-title">
+                    Detect Respiratory<br>
+                    Diseases with <span class="gradient-text">AI Precision</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Upload a breath sound recording and let our deep learning model analyze it
+                    for signs of Asthma, COPD, Pneumonia, or confirm healthy breathing patterns.
+                </p>
+                <div class="hero-actions">
+                    <a href="#analyzer" class="btn btn-primary btn-lg" id="hero-cta">
+                        <span class="btn-icon">▶</span>
+                        Start Analysis
+                    </a>
+                    <a href="#diseases" class="btn btn-ghost btn-lg">
+                        Explore Diseases
+                        <span class="btn-arrow">→</span>
+                    </a>
+                </div>
+                <div class="stats-bar">
+                    <div class="stat-item">
+                        <span class="stat-value">4</span>
+                        <span class="stat-label">Conditions Detected</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-value">93.7%</span>
+                        <span class="stat-label">Model Accuracy</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-value">ResNet-18</span>
+                        <span class="stat-label">Architecture</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-value">ICBHI</span>
+                        <span class="stat-label">Dataset</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analyzer">
+            <div class="section-container">
+                <div class="section-header">
+                    <span class="section-badge">Breath Sound Analysis</span>
+                    <h2 class="section-title">AI-Powered <span class="gradient-text">Diagnosis</span></h2>
+                    <p class="section-subtitle">Upload a breath sound recording or use your microphone for live capture to receive an instant AI analysis with confidence scores and spectrogram visualization.</p>
+                </div>
+
+                <div class="analyzer-layout">
+                    
+                    <div class="upload-panel">
+                        <div class="upload-zone" id="upload-zone">
+                            <div class="upload-icon-wrapper">
+                                <svg class="upload-icon" viewBox="0 0 64 64" fill="none">
+                                    <circle cx="32" cy="32" r="30" stroke="currentColor" stroke-width="2" stroke-dasharray="8 4" opacity="0.3"/>
+                                    <path d="M32 20v24M20 32l12-12 12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <p class="upload-text">Drag & drop your audio file here</p>
+                            <p class="upload-hint">or click to browse — supports .wav, .mp3, .ogg, .flac</p>
+                            <input type="file" id="file-input" accept="audio/*" hidden>
+                        </div>
+
+                        <div class="or-divider">
+                            <span class="or-line"></span>
+                            <span class="or-text">OR</span>
+                            <span class="or-line"></span>
+                        </div>
+
+                        <div class="mic-section" id="mic-section">
+                            <button class="mic-btn" id="mic-btn" aria-label="Record from microphone">
+                                <span class="mic-icon" id="mic-icon">
+                                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                                        <line x1="12" y1="19" x2="12" y2="23"/>
+                                        <line x1="8" y1="23" x2="16" y2="23"/>
+                                    </svg>
+                                </span>
+                                <span class="mic-pulse" id="mic-pulse"></span>
+                            </button>
+                            <p class="mic-label" id="mic-label">Tap to Record</p>
+                            <div class="mic-timer" id="mic-timer" style="display: none;">
+                                <span class="recording-dot"></span>
+                                <span class="timer-text" id="timer-text">00:00</span>
+                            </div>
+                            <p class="mic-hint">Record up to 20 seconds of breath sounds using your device microphone</p>
+                            <div class="playback-section" id="playback-section" style="display: none;">
+                                <div class="playback-controls">
+                                    <button class="playback-btn" id="playback-btn" aria-label="Play recorded audio">
+                                        <svg id="playback-icon-play" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><polygon points="5,3 19,12 5,21"></polygon></svg>
+                                        <svg id="playback-icon-pause" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" style="display:none;"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+                                    </button>
+                                    <div class="playback-info">
+                                        <span class="playback-label">Play Recording</span>
+                                        <span class="playback-time" id="playback-time">00:00 / 00:00</span>
+                                    </div>
+                                </div>
+                                <div class="playback-progress-track" id="playback-progress-track">
+                                    <div class="playback-progress-fill" id="playback-progress-fill"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="file-info" id="file-info" style="display: none;">
+                            <div class="file-icon">♪</div>
+                            <div class="file-details">
+                                <span class="file-name" id="file-name"></span>
+                                <span class="file-size" id="file-size"></span>
+                            </div>
+                            <button class="file-remove" id="file-remove" aria-label="Remove file">✕</button>
+                        </div>
+
+                        <button class="btn btn-primary btn-lg btn-full" id="analyze-btn" disabled>
+                            <span class="btn-icon">⟩</span>
+                            <span class="btn-text">Analyze Breath Sound</span>
+                            <div class="btn-loader" id="btn-loader" style="display:none;">
+                                <div class="spinner"></div>
+                            </div>
+                        </button>
+
+                    </div>
+
+                    <div class="results-panel" id="results-panel" style="display: none;">
+                        
+                        <div class="prediction-card" id="prediction-card">
+                            <div class="prediction-header">
+                                <span class="prediction-icon" id="prediction-icon"></span>
+                                <div>
+                                    <h3 class="prediction-title">Primary Detection</h3>
+                                    <p class="prediction-class" id="prediction-class"></p>
+                                </div>
+                                <div class="prediction-confidence" id="prediction-confidence"></div>
+                            </div>
+                            <p class="prediction-description" id="prediction-description"></p>
+                            <div class="prediction-actions" style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
+                                <button class="btn btn-sm btn-outline" id="learn-more-btn">
+                                    Learn More About This Condition →
+                                </button>
+                                <button class="btn btn-sm btn-primary" id="download-report-btn">
+                                    <span class="btn-icon">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-right: 4px;">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="7 10 12 15 17 10"></polyline>
+                                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                                        </svg>
+                                    </span>
+                                    Download PDF Report
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="charts-row">
+                            <div class="chart-box">
+                                <h4 class="chart-title">Confidence Distribution</h4>
+                                <div class="chart-wrapper">
+                                    <canvas id="confidence-chart"></canvas>
+                                </div>
+                            </div>
+                            <div class="chart-box">
+                                <h4 class="chart-title">Audio Waveform</h4>
+                                <div class="chart-wrapper waveform-wrapper">
+                                    <canvas id="waveform-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="spectrogram-box">
+                            <h4 class="chart-title">Mel Spectrogram Visualization</h4>
+                            <p class="chart-subtitle">Frequency analysis of the breath sound — this is what the AI model processes</p>
+                            <div class="spectrogram-wrapper">
+                                <img id="spectrogram-img" alt="Mel spectrogram of uploaded breath sound">
+                            </div>
+                        </div>
+
+                        <div class="confidence-breakdown" id="confidence-breakdown">
+                            <h4 class="chart-title">Detailed Confidence Scores</h4>
+                            <div class="breakdown-bars" id="breakdown-bars">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="diseases">
+            <div class="section-container">
+                <div class="section-header">
+                    <span class="section-badge">Disease Encyclopedia</span>
+                    <h2 class="section-title">Conditions We <span class="gradient-text">Detect</span></h2>
+                    <p class="section-subtitle">Click on any condition to explore detailed information including symptoms, causes, treatments, and medications.</p>
+                </div>
+
+                <div class="disease-grid">
+                    
+                    <div class="disease-card" data-disease="healthy" tabindex="0" role="button" aria-label="View details for Healthy breathing">
+                        <div class="card-glow" style="--card-color: #10B981;"></div>
+                        <div class="card-body">
+                            <div class="card-icon-wrap" style="--card-color: #10B981;"><svg width='20' height='20'><circle cx='10' cy='10' r='8' fill='#10B981'/></svg></div>
+                            <h3 class="card-name">Healthy</h3>
+                            <p class="card-tagline">Normal respiratory function</p>
+                            <div class="card-stat">
+                                <span class="card-stat-icon"></span>
+                                <span>~20,000 breaths per day</span>
+                            </div>
+                            <div class="card-footer">
+                                <span class="card-link">Explore Details</span>
+                                <span class="card-arrow">→</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="disease-card" data-disease="asthma" tabindex="0" role="button" aria-label="View details for Asthma">
+                        <div class="card-glow" style="--card-color: #F59E0B;"></div>
+                        <div class="card-body">
+                            <div class="card-icon-wrap" style="--card-color: #F59E0B;"><svg width='20' height='20'><circle cx='10' cy='10' r='8' fill='#F59E0B'/></svg></div>
+                            <h3 class="card-name">Asthma</h3>
+                            <p class="card-tagline">Chronic airway inflammation</p>
+                            <div class="card-stat">
+                                <span class="card-stat-icon"></span>
+                                <span>262M affected worldwide</span>
+                            </div>
+                            <div class="card-footer">
+                                <span class="card-link">Explore Details</span>
+                                <span class="card-arrow">→</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="disease-card" data-disease="copd" tabindex="0" role="button" aria-label="View details for COPD">
+                        <div class="card-glow" style="--card-color: #EF4444;"></div>
+                        <div class="card-body">
+                            <div class="card-icon-wrap" style="--card-color: #EF4444;"><svg width='20' height='20'><circle cx='10' cy='10' r='8' fill='#EF4444'/></svg></div>
+                            <h3 class="card-name">COPD</h3>
+                            <p class="card-tagline">Chronic obstructive pulmonary disease</p>
+                            <div class="card-stat">
+                                <span class="card-stat-icon"></span>
+                                <span>3rd leading cause of death</span>
+                            </div>
+                            <div class="card-footer">
+                                <span class="card-link">Explore Details</span>
+                                <span class="card-arrow">→</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="disease-card" data-disease="pneumonia" tabindex="0" role="button" aria-label="View details for Pneumonia">
+                        <div class="card-glow" style="--card-color: #8B5CF6;"></div>
+                        <div class="card-body">
+                            <div class="card-icon-wrap" style="--card-color: #8B5CF6;"><svg width='20' height='20'><circle cx='10' cy='10' r='8' fill='#8B5CF6'/></svg></div>
+                            <h3 class="card-name">Pneumonia</h3>
+                            <p class="card-tagline">Lung infection with inflammation</p>
+                            <div class="card-stat">
+                                <span class="card-stat-icon"></span>
+                                <span>2.5M deaths per year</span>
+                            </div>
+                            <div class="card-footer">
+                                <span class="card-link">Explore Details</span>
+                                <span class="card-arrow">→</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="how-it-works">
+            <div class="section-container">
+                <div class="section-header">
+                    <span class="section-badge">Our Technology</span>
+                    <h2 class="section-title">How <span class="gradient-text">BreathAnalysis</span> Works</h2>
+                    <p class="section-subtitle">Our three-step process transforms raw breath sounds into actionable health insights.</p>
+                </div>
+
+                <div class="steps-container">
+                    <div class="step-connector"></div>
+
+                    <div class="step animate-on-scroll">
+                        <div class="step-number">01</div>
+
+                        <h3 class="step-title">Upload Audio</h3>
+                        <p class="step-desc">Record or upload a breath sound in .wav, .mp3, or other common audio formats. The system accepts recordings up to 20 seconds.</p>
+                    </div>
+
+                    <div class="step animate-on-scroll">
+                        <div class="step-number">02</div>
+
+                        <h3 class="step-title">AI Analysis</h3>
+                        <p class="step-desc">Our ResNet-18 deep learning model converts the audio into a mel spectrogram and analyzes frequency patterns characteristic of different respiratory conditions.</p>
+                    </div>
+
+                    <div class="step animate-on-scroll">
+                        <div class="step-number">03</div>
+
+                        <h3 class="step-title">Get Results</h3>
+                        <p class="step-desc">View detailed confidence scores, interactive charts, spectrogram visualizations, and comprehensive information about detected conditions — all in seconds.</p>
+                    </div>
+                </div>
+
+                <div class="tech-specs">
+                    <div class="tech-card animate-on-scroll">
+                        <div class="tech-icon">R18</div>
+                        <h4>ResNet-18</h4>
+                        <p>18-layer deep residual network pre-trained on ImageNet, fine-tuned on respiratory spectrograms.</p>
+                    </div>
+                    <div class="tech-card animate-on-scroll">
+                        <div class="tech-icon">DB</div>
+                        <h4>ICBHI 2017</h4>
+                        <p>Trained on the ICBHI Respiratory Sound Database — the gold standard benchmark for lung sound classification.</p>
+                    </div>
+                    <div class="tech-card animate-on-scroll">
+                        <div class="tech-icon">93.7%</div>
+                        <h4>93.7% Accuracy</h4>
+                        <p>Achieves 93.7% overall accuracy across 4 classes with class-balanced correction for reliable predictions.</p>
+                    </div>
+                    <div class="tech-card animate-on-scroll">
+                        <div class="tech-icon">RT</div>
+                        <h4>Real-time</h4>
+                        <p>Analysis completes in seconds, providing instant feedback with spectrogram and waveform visualizations.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="footer">
+        <div class="footer-container">
+            <div class="footer-disclaimer">
+                <span class="disclaimer-badge">Medical Disclaimer</span>
+                <p>This tool is designed for <strong>educational and research purposes only</strong>. It is NOT a substitute for professional medical diagnosis, treatment, or advice. Always consult a qualified healthcare provider for any medical concerns. The AI model may produce inaccurate results and should not be relied upon for clinical decision-making.</p>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-brand">
+                    <span class="logo-icon"><svg width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M6.081 20C2.033 17.092 1 13.676 1 12.5c0-2.033 1.073-3.5 2.5-3.5 1.5 0 2.5 1 3 2l1.5 2.5'/><path d='M17.92 20c4.047-2.908 5.08-6.324 5.08-7.5 0-2.033-1.073-3.5-2.5-3.5-1.5 0-2.5 1-3 2L14 13.5'/><path d='M12 2v7.5M8 5.5l4 4 4-4'/></svg></span>
+                    <span>BreathAnalysis</span>
+                </div>
+                <p class="footer-credits">Built with <strong>ResNet-18</strong> · <strong>ICBHI 2017</strong> Dataset · <strong>FastAPI</strong> + <strong>PyTorch</strong></p>
+                <div class="footer-team">
+                    <p class="team-label">An Educational College Project by</p>
+                    <p class="team-names">Aryan K Ail · Ayush Khare · Abhinav Racha · Aditya Singh</p>
+                </div>
+                <p class="footer-copy">DTL Project &copy; 2026. For educational purposes only.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="modal-overlay" id="disease-modal" role="dialog" aria-modal="true" aria-labelledby="modal-disease-name" style="display: none;">
+        <div class="modal-container">
+            <div class="modal-header" id="modal-header">
+                <div class="modal-title-row">
+                    <span class="modal-icon" id="modal-icon"></span>
+                    <div>
+                        <h2 class="modal-disease-name" id="modal-disease-name"></h2>
+                        <p class="modal-tagline" id="modal-tagline"></p>
+                    </div>
+                </div>
+                <button class="modal-close" id="modal-close" aria-label="Close modal">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal-tabs" id="modal-tabs">
+                <button class="tab-btn active" data-tab="overview">Overview</button>
+                <button class="tab-btn" data-tab="symptoms">Symptoms</button>
+                <button class="tab-btn" data-tab="causes">Causes</button>
+                <button class="tab-btn" data-tab="treatment">Treatment</button>
+                <button class="tab-btn" data-tab="medications">Medications</button>
+                <button class="tab-btn" data-tab="prevention">Prevention</button>
+            </div>
+
+            <div class="modal-body" id="modal-body">
+                
+                <div class="tab-content active" id="tab-overview">
+                    <div class="overview-stats" id="overview-stats"></div>
+                    <div class="overview-text" id="overview-text"></div>
+                    <div class="breath-sounds-box" id="breath-sounds-box">
+                        <h4>What It Sounds Like</h4>
+                        <p id="breath-sounds-text"></p>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-symptoms">
+                    <div class="symptoms-grid" id="symptoms-grid"></div>
+                </div>
+
+                <div class="tab-content" id="tab-causes">
+                    <div class="causes-grid" id="causes-grid"></div>
+                    <div class="stages-section" id="stages-section">
+                        <h4 class="subsection-title">Severity Stages</h4>
+                        <div class="stages-timeline" id="stages-timeline"></div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-treatment">
+                    <div class="treatments-grid" id="treatments-grid"></div>
+                    <div class="diagnosis-section">
+                        <h4 class="subsection-title">Diagnosis Methods</h4>
+                        <div class="diagnosis-list" id="diagnosis-list"></div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="tab-medications">
+                    <div class="medications-grid" id="medications-grid"></div>
+                </div>
+
+                <div class="tab-content" id="tab-prevention">
+                    <div class="prevention-grid" id="prevention-grid"></div>
+                    <div class="doctor-alert" id="doctor-alert">
+                        <h4>When to See a Doctor</h4>
+                        <ul id="doctor-alert-list"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="modal-references" id="modal-references">
+                    <h4>References</h4>
+                    <div class="references-list" id="references-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="loading-overlay" id="loading-overlay" style="display: none;">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Analyzing breath sounds...</p>
+            <p class="loading-subtext">Processing mel spectrogram through ResNet-18</p>
+        </div>
+    </div>
+
+    <div style="height: 0; width: 0; overflow: hidden; position: absolute; top: -9999px; left: -9999px;">
+        <div id="pdf-report-container" style="width: 800px; background: white; color: #1f2937; padding: 30px; font-family: 'Inter', sans-serif;"></div>
+    </div>
+
+    <script src="app.js?v=4"></script>
+</body>
+</html>

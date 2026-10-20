@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+torch
+torchvision
+librosa
+numpy
+matplotlib
+python-multipart
+Pillow
+aiofiles
